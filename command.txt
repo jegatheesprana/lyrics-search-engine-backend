@@ -1,0 +1,3 @@
+curl -X PUT "localhost:9200/lyrics-test?pretty" -H "Content-Type: application/json" -d @mapping_file.json -u elastic:EMyoDwDL4UH=4GHQW5X=
+
+curl -X POST "localhost:9200/lyrics-test/_bulk?pretty" -H "Content-Type: application/json" --data-binary @songs.json -u elastic:EMyoDwDL4UH=4GHQW5X=

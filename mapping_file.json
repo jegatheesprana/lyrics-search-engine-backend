@@ -1,0 +1,94 @@
+{
+    "settings": {
+        "index": {
+            "analysis": {
+                "analyzer": {
+                    "plain": {
+                        "filter": [],
+                        "tokenizer": "standard"
+                    },
+                    "case_insensitive": {
+                        "filter": ["lowercase"],
+                        "tokenizer": "standard"
+                    },
+                    "inflections": {
+                        "filter": ["porter_stem"],
+                        "tokenizer": "standard"
+                    },
+                    "case_insensitive_and_inflections": {
+                        "filter": ["lowercase", "porter_stem"],
+                        "tokenizer": "standard"
+                    }
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "song_name": {
+                "type": "text",
+                "analyzer": "plain",
+                "fields": {
+                    "case_insensitive": {
+                        "type": "text",
+                        "analyzer": "case_insensitive"
+                    },
+                    "inflections": {
+                        "type": "text",
+                        "analyzer": "inflections"
+                    },
+                    "case_insensitive_and_inflections": {
+                        "type": "text",
+                        "analyzer": "case_insensitive_and_inflections"
+                    }
+                }
+            },
+            "lyrics": {
+                "type": "text",
+                "analyzer": "plain",
+                "fields": {
+                    "case_insensitive": {
+                        "type": "text",
+                        "analyzer": "case_insensitive"
+                    },
+                    "inflections": {
+                        "type": "text",
+                        "analyzer": "inflections"
+                    },
+                    "case_insensitive_and_inflections": {
+                        "type": "text",
+                        "analyzer": "case_insensitive_and_inflections"
+                    }
+                }
+            },
+            "album": {
+                "type": "text",
+                "analyzer": "plain"
+            },
+            "lyricist": {
+                "type": "text",
+                "analyzer": "plain"
+            },
+            "singers": {
+                "type": "text",
+                "analyzer": "plain"
+            },
+            "composer": {
+                "type": "text",
+                "analyzer": "plain"
+            },
+            "metaphors": {
+                "properties": {
+                    "metaphor": { "type": "text" },
+                    "target": { "type": "text" },
+                    "source": { "type": "text" },
+                    "interpretation": { "type": "text" }
+                }
+            },
+            "year": {
+                "type": "date",
+                "format": "yyyy"
+            }
+        }
+    }
+}
