@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from searchquery import search
+from searchquery import search, autofill
 from elasticsearch_dsl import Index
 
 app = Flask(__name__)
@@ -16,7 +16,7 @@ def index():
 
 @app.route('/search', methods=['POST'])
 @cross_origin()
-def hello_world():
+def search_controller():
     data = json.loads(request.data)
     query = data['query']
     metaphor = data['metaphor']
@@ -27,6 +27,21 @@ def hello_world():
         filter = False
         fields = []
     res = search(query, filter=filter, fields=fields, metaphor=metaphor)
+    hits = res['hits']['hits']
+    time = res['took']
+    # aggs = res['aggregations']
+    num_results = res['hits']['total']['value']
+
+    return jsonify({'query': query, 'results': hits, 'total_results': num_results, 'time': time})
+
+
+@app.route('/autofill', methods=['POST'])
+@cross_origin()
+def autofill_controller():
+    data = json.loads(request.data)
+    query = data['query']
+
+    res = autofill(query)
     hits = res['hits']['hits']
     time = res['took']
     # aggs = res['aggregations']
