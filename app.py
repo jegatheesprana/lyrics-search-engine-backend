@@ -26,7 +26,7 @@ def hello_world():
     else:
         filter = False
         fields = []
-    res = search(query, filter=filter, fields=fields)
+    res = search(query, filter=filter, fields=fields, metaphor=metaphor)
     hits = res['hits']['hits']
     time = res['took']
     # aggs = res['aggregations']
