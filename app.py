@@ -19,6 +19,7 @@ def index():
 def hello_world():
     data = json.loads(request.data)
     query = data['query']
+    metaphor = data['metaphor']
     if ('filter' in data):
         filter = data['filter']
         fields = data['fields']

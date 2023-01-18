@@ -24,20 +24,44 @@ def advanced_search(query, fields):
     return q
 
 
+def search_metaphor(query, fields, metaphor):
+    return {
+        "query": {
+            "bool": {
+                "must": {
+                    "match": {
+                        "metaphors.target": {
+                            "query": metaphor
+                        }
+                    }
+                },
+                "should": {
+                    "multi_match": {
+                        "query":    query,
+                        "fields": fields
+                    }
+                }
+            }
+        }
+    }
+
+
 INDEX = 'lyrics-test'
 client = Elasticsearch(HOST="http://localhost", PORT=9200,
                        http_auth=('elastic', 'EMyoDwDL4UH=4GHQW5X='))
 
 
-def search(query, filter, fields):
-    print(query, filter, fields)
+def search(query, filter, fields, metaphor):
     # result = client. (index=INDEX,body=standard_analyzer(query))
     # keywords = result ['tokens']['token']
     # print(keywords)
 
     # query_body= process(query)
-    query_body = advanced_search(
-        query, fields) if filter else basic_search(query)
+    if (metaphor):
+        query_body = search_metaphor(query, fields, metaphor)
+    else:
+        query_body = advanced_search(
+            query, fields, metaphor) if filter else basic_search(query)
     print('Making Basic Search ')
     res = client.search(index=INDEX, body=query_body)
     return res

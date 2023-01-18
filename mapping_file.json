@@ -79,7 +79,6 @@
             },
             "metaphors": {
                 "properties": {
-                    "metaphor": { "type": "text" },
                     "target": { "type": "text" },
                     "source": { "type": "text" },
                     "interpretation": { "type": "text" }
