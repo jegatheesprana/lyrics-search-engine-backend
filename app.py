@@ -17,14 +17,21 @@ def index():
 @app.route('/search', methods=['POST'])
 @cross_origin()
 def hello_world():
-    query = json.loads(request.data)['query']
-    res = search(query)
+    data = json.loads(request.data)
+    query = data['query']
+    if ('filter' in data):
+        filter = data['filter']
+        fields = data['fields']
+    else:
+        filter = False
+        fields = []
+    res = search(query, filter=filter, fields=fields)
     hits = res['hits']['hits']
     time = res['took']
     # aggs = res['aggregations']
     num_results = res['hits']['total']['value']
 
-    return jsonify({'query': query, 'hits': hits, 'num_results': num_results, 'time': time})
+    return jsonify({'query': query, 'results': hits, 'total_results': num_results, 'time': time})
 
 
 if __name__ == '__main__':
