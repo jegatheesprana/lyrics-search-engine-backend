@@ -10,7 +10,7 @@ def shape_fields(fields):
 
 
 def basic_search(query):
-    q = {
+    return {
         "query": {
             "query_string": {
                 "query": query
@@ -18,20 +18,30 @@ def basic_search(query):
         },
         "size": 200
     }
-    return q
+
+
+def year_search(year):
+    return {
+        "query": {
+            "match": {
+                "year": year
+            }
+        },
+        "size": 200
+    }
 
 
 def advanced_search(query, fields):
     shape_fields(fields=fields)
-    q = {
+    return {
         "query": {
             "multi_match": {
                 "query":    query,
                 "fields": fields
             }
-        }
+        },
+        "size": 200
     }
-    return q
 
 
 def search_metaphor(query, fields, metaphor):
@@ -41,7 +51,7 @@ def search_metaphor(query, fields, metaphor):
             "bool": {
                 "must": {
                     "match": {
-                        "metaphors.target": {
+                        "metaphors.source": {
                             "query": metaphor
                         }
                     }
@@ -53,7 +63,8 @@ def search_metaphor(query, fields, metaphor):
                     }
                 }
             }
-        }
+        },
+        "size": 200
     }
 
 
@@ -72,8 +83,8 @@ def get_unique(field):
     return {
         "size": 0,
         "aggs": {
-            "years": {
-                "terms": {"field": "year",  "size": 500}
+            "items": {
+                "terms": {"field": field,  "size": 500}
             }
         }
     }
@@ -84,13 +95,15 @@ client = Elasticsearch(HOST="http://localhost", PORT=9200,
                        http_auth=('elastic', 'EMyoDwDL4UH=4GHQW5X='))
 
 
-def search(query, filter, fields, metaphor):
+def search(query, filter, fields, metaphor, year):
     # result = client. (index=INDEX,body=standard_analyzer(query))
     # keywords = result ['tokens']['token']
     # print(keywords)
     print(query, filter, fields, metaphor)
     # query_body= process(query)
-    if (metaphor):
+    if (year):
+        query_body = year_search(year)
+    elif (metaphor):
         query_body = search_metaphor(query, fields, metaphor)
     else:
         query_body = advanced_search(
@@ -103,6 +116,14 @@ def search(query, filter, fields, metaphor):
 def autofill(query):
 
     query_body = get_autofill(query)
+
+    res = client.search(index=INDEX, body=query_body)
+    return res
+
+
+def unique(field):
+
+    query_body = get_unique(field)
 
     res = client.search(index=INDEX, body=query_body)
     return res

@@ -18,6 +18,10 @@
                     "case_insensitive_and_inflections": {
                         "filter": ["lowercase", "porter_stem"],
                         "tokenizer": "standard"
+                    },
+                    "tamil": {
+                        "tokenizer": "standard",
+                        "filter": []
                     }
                 }
             }
@@ -45,21 +49,7 @@
             },
             "lyrics": {
                 "type": "text",
-                "analyzer": "plain",
-                "fields": {
-                    "case_insensitive": {
-                        "type": "text",
-                        "analyzer": "case_insensitive"
-                    },
-                    "inflections": {
-                        "type": "text",
-                        "analyzer": "inflections"
-                    },
-                    "case_insensitive_and_inflections": {
-                        "type": "text",
-                        "analyzer": "case_insensitive_and_inflections"
-                    }
-                }
+                "analyzer": "plain"
             },
             "album": {
                 "type": "text",
@@ -79,9 +69,9 @@
             },
             "metaphors": {
                 "properties": {
-                    "target": { "type": "text" },
-                    "source": { "type": "text" },
-                    "interpretation": { "type": "text" }
+                    "target": { "type": "text", "analyzer": "plain" },
+                    "source": { "type": "text", "analyzer": "plain" },
+                    "interpretation": { "type": "text", "analyzer": "plain" }
                 }
             },
             "year": {
